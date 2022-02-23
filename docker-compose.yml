@@ -63,9 +63,9 @@ x-quorum-def:
       fi
       NETWORK_ID=$$(cat $${GENESIS_FILE} | grep chainId | awk -F " " '{print $$2}' | awk -F "," '{print $$1}')
       GETH_ARGS_raft="--raft --raftport 50400"
-      GETH_ARGS_clique="--syncmode full --mine --minerthreads 1"
-      GETH_ARGS_istanbul="--emitcheckpoints --istanbul.blockperiod 1 --mine --minerthreads 1 --syncmode full"
-      GETH_ARGS_qbft="--emitcheckpoints --istanbul.blockperiod 1 --mine --minerthreads 1 --syncmode full"
+      GETH_ARGS_clique="--syncmode full --mine --miner.threads 1"
+      GETH_ARGS_istanbul="--emitcheckpoints --istanbul.blockperiod 1 --mine --miner.threads 1 --syncmode full"
+      GETH_ARGS_qbft="--emitcheckpoints --istanbul.blockperiod 1 --mine --miner.threads 1 --syncmode full"
       geth --datadir $${DDIR} init $${GENESIS_FILE}
       geth \
         --identity node$${NODE_ID}-${QUORUM_CONSENSUS:-clique} \
@@ -117,7 +117,7 @@ x-tx-manager-def:
       in
         tessera)
           cp /networkdata/keys/validator$${NODE_ID}/tessera.pub $${DDIR}/tm.pub
-          cp /networkdata/keys/validator$${NODE_ID}/tessera.key
+          cp /networkdata/keys/validator$${NODE_ID}/tessera.key $${DDIR}/tm.key
           if [ -f "/tessera/tessera-app.jar" ]; then
               TESSERA_VERSION=$$(unzip -p /tessera/tessera-app.jar META-INF/MANIFEST.MF | grep Tessera-Version | cut -d" " -f2)
           else
@@ -209,7 +209,7 @@ x-tx-manager-def:
             --url=http://$$(hostname -i):9000/ \
             --port=9000 \
             --socket=$${DDIR}/tm.ipc \
-            --othernodes=http://172.16.239.101:9000/,http://172.16.239.102:9000/,http://172.16.239.103:9000/,http://172.16.239.104:9000/,http://172.16.239.105:9000/ \
+            --othernodes=http://172.16.239.101:9000/,http://172.16.239.102:9000/,http://172.16.239.103:9000/,http://172.16.239.104:9000/ \
             --publickeys=/networkdata/keys/validator$${NODE_ID}/tessera.pub \
             --privatekeys=/networkdata/keys/validator$${NODE_ID}/tessera.key \
             --storage=$${DDIR} \
