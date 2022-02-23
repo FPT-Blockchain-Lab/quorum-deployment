@@ -249,8 +249,8 @@ x-cakeshop-def:
       java -Xms128M -Xmx128M -Dspring.config.additional-location=file:/qdata/cakeshop/local/ -Dcakeshop.config.dir=/qdata/cakeshop -jar /cakeshop/cakeshop.war
       ;;
 services:
-  node1:
-    << : *quorum-def
+  # node1:
+  #   << : *quorum-def
   #   hostname: node1
   #   ports:
   #     - "22000:8545"
