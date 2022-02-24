@@ -21,7 +21,7 @@
       }
     ],
     "clique": {
-      "period": 5,
+      "period": 15,
       "epoch": 30000
     }
   },
