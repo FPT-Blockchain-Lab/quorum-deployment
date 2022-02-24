@@ -394,21 +394,25 @@ services:
   blockscout:
     depends_on:
       - blockcout_db
-    image: blockscout/blockscout:latest
+    image: consensys/blockscout:v4.0.0-beta
     restart: always
     container_name: 'blockscout'
-    links:
-      - blockcout_db:database
     command: 'mix do ecto.create, ecto.migrate, phx.server'
-    env_file:
-      -  ./envs/common-blockscout.env
     environment:
-        ETHEREUM_JSONRPC_VARIANT: 'geth'
-        BLOCK_TRANSFORMER: 'clique'
-        ETHEREUM_JSONRPC_HTTP_URL: http://192.168.1.250:22000/
-        ETHEREUM_JSONRPC_TRACE_URL: http://192.168.1.250:22000/
-        DATABASE_URL: postgresql://postgres:postgres@blockcout_db:7432/blockscout?ssl=false
-        ECTO_USE_SSL: 'false'
+      PORT: 4000
+      DATABASE_URL: postgresql://postgres:postgres@blockcout_db:7432/blockscout?ssl=false
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_USER: 'postgres'
+      NETWORK: 'quorum'
+      SUBNETWORK: 'consensys'
+      CHAIN_ID: 10
+      COIN: 'eth'
+      ETHEREUM_JSONRPC_VARIANT: 'geth'
+      ETHEREUM_JSONRPC_TRANSPORT: 'http'
+      ETHEREUM_JSONRPC_HTTP_URL: 'http://192.168.1.250:22000'
+      ETHEREUM_JSONRPC_TRACE_URL: 'http://192.168.1.250:22000'
+      ETHEREUM_JSONRPC_WS_URL: 'ws://192.168.1.250:22000'
+      SECRET_KEY_BASE: 'VTIB3uHDNbvrY0+60ZWgUoUBKDn9ppLR8MI4CpRz4/qLyEFs54ktJfaNT6Z221'
     ports:
       - 4000:4000
   # cakeshop:
