@@ -74,16 +74,18 @@ x-quorum-def:
         --nodiscover \
         --verbosity 5 \
         --networkid $${NETWORK_ID} \
+        --ws \
+        --ws.addr 0.0.0.0 \
+        --ws.port 8546 \
+        --ws.api admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,$${CONSENSUS_RPC_API} \
+        --ws.origins "*" \
+        --ws.rpcprefix "/" \
         --rpc \
         --rpccorsdomain "*" \
         --rpcvhosts "*" \
         --rpcaddr 0.0.0.0 \
         --rpcport 8545 \
         --rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,$${CONSENSUS_RPC_API} \
-        --ws.addr 0.0.0.0 \
-        --ws.port 8546 \
-        --ws.api admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,$${CONSENSUS_RPC_API} \
-        --ws.origins * \
         --port 21000 \
         --unlock 0 \
         --allow-insecure-unlock \
