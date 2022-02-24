@@ -79,7 +79,6 @@ x-quorum-def:
         --ws.port 8546 \
         --ws.api admin,eth,debug,miner,net,shh,txpool,personal,web3,quorum,$${CONSENSUS_RPC_API} \
         --ws.origins "*" \
-        --ws.rpcprefix "/" \
         --rpc \
         --rpccorsdomain "*" \
         --rpcvhosts "*" \
