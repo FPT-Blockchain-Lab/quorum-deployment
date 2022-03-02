@@ -1,0 +1,11 @@
+
+nodeFlags:
+  bootnode: false
+  generateKeys: true
+  privacy: true
+  removeKeysOnDeletion: true
+node:
+  tessera:
+    password: "test"
+
+provider: local
