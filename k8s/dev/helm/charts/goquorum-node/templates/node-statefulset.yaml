@@ -344,6 +344,7 @@ spec:
             
             geth \
             --datadir {{ .Values.node.quorum.dataPath }} \
+            --gcmode {{ .Values.node.quorum.gcmode }} \
             --nodiscover \
             --permissioned \
             --nat extip:$POD_IP \

@@ -37,6 +37,7 @@ node:
     dataPath: "/data/quorum"
     keysPath: "/keys"
     genesisFilePath: "/etc/genesis/genesis.json"
+    gcmode: "full"
     networkId: 10
     replicaCount: 1
     account: {}

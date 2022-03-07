@@ -1,0 +1,16 @@
+---
+nodeFlags:
+  bootnode: false
+  generateKeys: false
+  privacy: false
+  removeKeysOnDeletion: false
+
+node:
+  quorum:
+    gcmode: "archive"
+    networkId: 10
+    replicaCount: 1
+    account:
+      unlock: 0
+      password: "/data/quorum/passwords.txt"
+provider: local
