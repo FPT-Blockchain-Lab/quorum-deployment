@@ -160,5 +160,4 @@ spec:
         args:
           - |
             exec
-            sed -i "306 a defp entry_to_elixir({key, _}) when key in ~w(isPrivacyMarkerTransaction) do\n    :ignore\n  end\n" /opt/app/apps/ethereum_jsonrpc/lib/ethereum_jsonrpc/receipt.ex
             cd /opt/app/ && echo $$MIX_ENV && mix do ecto.create, ecto.migrate; mix phx.server;
