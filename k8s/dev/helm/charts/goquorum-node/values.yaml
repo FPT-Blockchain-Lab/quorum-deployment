@@ -30,7 +30,7 @@ node:
     resources:
       cpuLimit: 0.5
       cpuRequest: 0.1
-      memLimit: "2G"
+      memLimit: "4G"
       memRequest: "1G"
     # privKey:
     # pubKey:
