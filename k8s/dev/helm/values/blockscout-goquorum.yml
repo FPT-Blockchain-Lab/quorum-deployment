@@ -1,7 +1,7 @@
 ---
 image:
   blockscout:
-    repository: consensys/blockscout
+    repository: ktoanlba/blockscout-quorum
     tag: v4.0.0-beta
     pullPolicy: IfNotPresent
 
