@@ -267,16 +267,6 @@ spec:
             cpu: "{{ .Values.node.quorum.resources.cpuLimit }}"
             memory: "{{ .Values.node.quorum.resources.memLimit }}"
         env:
-          - name: BOOTNODE1_PUBKEY
-            valueFrom:
-              secretKeyRef:
-                name: goquorum-node-bootnode-1-keys
-                key: enode
-          - name: BOOTNODE2_PUBKEY
-            valueFrom:
-              secretKeyRef:
-                name: goquorum-node-bootnode-2-keys
-                key: enode
           - name: POD_IP
             valueFrom:
               fieldRef:
@@ -313,6 +303,9 @@ spec:
             readOnly: true
           - name: data
             mountPath: {{ .Values.node.quorum.dataPath }}
+          - name: enhanced-permission-config
+            mountPath: /config/enhanced-permission
+            readOnly: true
         ports:
           - name: json-rpc
             containerPort: {{ .Values.node.quorum.rpc.port }}
@@ -349,27 +342,18 @@ spec:
             echo '[]' > {{ .Values.node.quorum.dataPath }}/disallowed-nodes.json
             echo '' > /data/quorum/passwords.txt
             
-          {{- if eq .Values.nodeFlags.bootnode true }}
             cp /config/static/static-nodes.json {{ .Values.node.quorum.dataPath }}/static-nodes.json
-          {{- end }}
             cp /config/static/static-nodes.json {{ .Values.node.quorum.dataPath }}/permissioned-nodes.json
-            
-            export BOOTNODE_ENODE1="enode://${BOOTNODE1_PUBKEY}@goquorum-node-bootnode-1-0.goquorum-node-bootnode-1.{{ .Release.Namespace }}.svc.cluster.local:30303" ;
-            export BOOTNODE_ENODE2="enode://${BOOTNODE2_PUBKEY}@goquorum-node-bootnode-2-0.goquorum-node-bootnode-2.{{ .Release.Namespace }}.svc.cluster.local:30303" ;
-
+            cp /config/enhanced-permission/permission-config.json {{ .Values.node.quorum.dataPath }}/permission-config.json
+          
             geth \
             --datadir {{ .Values.node.quorum.dataPath }} \
             --gcmode {{ .Values.node.quorum.gcmode }} \
             --nodiscover \
             --permissioned \
-          {{- if ne .Values.nodeFlags.bootnode true }}
-            --bootnodes=${BOOTNODE_ENODE1},${BOOTNODE_ENODE2} \
-          {{- end }}
             --nat extip:$POD_IP \
             --verbosity {{ .Values.node.quorum.log.verbosity }} \
-          {{- if ne .Values.nodeFlags.bootnode true }}
             --mine --miner.threads {{ .Values.node.quorum.miner.threads }} --miner.gasprice 0 --emitcheckpoints \
-          {{- end }}
             --syncmode full --nousb \
             --metrics --pprof --pprof.addr {{ .Values.node.quorum.metrics.pprofaddr | quote }} --pprof.port {{ .Values.node.quorum.metrics.pprofport }} \
             --networkid {{ .Values.node.quorum.networkId }} \
@@ -394,6 +378,13 @@ spec:
           items:
             - key: genesis.json
               path: genesis.json
+      - name: enhanced-permission-config
+        configMap:
+          name: goquorum-enhanced-permission-config
+          optional: true
+          items:
+            - key: permission-config.json
+              path: permission-config.json
       - name: static-nodes
         configMap:
           name: goquorum-node-enodes

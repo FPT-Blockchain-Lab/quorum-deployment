@@ -82,7 +82,7 @@ spec:
           args:
             - |
               echo "Creating config ..."
-              FOLDER_PATH=$(npx --yes --quiet quorum-genesis-tool@latest --consensus {{ .Values.rawGenesisConfig.genesis.config.algorithm.consensus }} {{ if .Values.rawGenesisConfig.blockchain.nodes.generate }} --validators {{ .Values.rawGenesisConfig.blockchain.nodes.count }} {{ else }} --validators 0 {{ end }} --members 0 --bootnodes 2 --chainID {{ .Values.rawGenesisConfig.genesis.config.chainId }} --blockperiod {{ .Values.rawGenesisConfig.genesis.config.algorithm.blockperiodseconds }} --epochLength {{ .Values.rawGenesisConfig.genesis.config.algorithm.epochlength }} --requestTimeout {{ .Values.rawGenesisConfig.genesis.config.algorithm.requesttimeoutseconds }} --difficulty {{ .Values.rawGenesisConfig.genesis.difficulty }} --gasLimit {{ .Values.rawGenesisConfig.genesis.gasLimit }} --coinbase {{ .Values.rawGenesisConfig.genesis.coinbase }} --outputPath /generated-config | tail -1 | sed -e "s/^Artifacts in folder: //")
+              FOLDER_PATH=$(npx --yes --quiet quorum-genesis-tool@latest --consensus {{ .Values.rawGenesisConfig.genesis.config.algorithm.consensus }} {{ if .Values.rawGenesisConfig.blockchain.nodes.generate }} --validators {{ .Values.rawGenesisConfig.blockchain.nodes.count }} {{ else }} --validators 0 {{ end }} --members 0 --bootnodes 0 --chainID {{ .Values.rawGenesisConfig.genesis.config.chainId }} --blockperiod {{ .Values.rawGenesisConfig.genesis.config.algorithm.blockperiodseconds }} --epochLength {{ .Values.rawGenesisConfig.genesis.config.algorithm.epochlength }} --requestTimeout {{ .Values.rawGenesisConfig.genesis.config.algorithm.requesttimeoutseconds }} --difficulty {{ .Values.rawGenesisConfig.genesis.difficulty }} --gasLimit {{ .Values.rawGenesisConfig.genesis.gasLimit }} --coinbase {{ .Values.rawGenesisConfig.genesis.coinbase }} --outputPath /generated-config | tail -1 | sed -e "s/^Artifacts in folder: //")
 
               echo $FOLDER_PATH
 
@@ -145,12 +145,12 @@ spec:
               for f in $(find $FOLDER_PATH -type d -iname "validator*" -exec basename {} \;); do
                 if [ -d $FOLDER_PATH/${f} ]; then
                   echo $f
-                  kubectl create secret generic goquorum-node-validator-${i}-keys --namespace {{ .Release.Namespace }} --from-file=nodekey=$FOLDER_PATH/${f}/nodekey --from-file=nodekey.pub=$FOLDER_PATH/${f}/nodekey.pub --from-file=enode=$FOLDER_PATH/${f}/nodekey.pub --from-file=keystore=$FOLDER_PATH/${f}/accountKeystore
+                  kubectl create secret generic goquorum-node-validator-${i}-keys --namespace {{ .Release.Namespace }} --from-file=nodekey=$FOLDER_PATH/${f}/nodekey --from-file=nodekey.pub=$FOLDER_PATH/${f}/nodekey.pub --from-file=enode=$FOLDER_PATH/${f}/nodekey.pub --from-file=keystore=$FOLDER_PATH/${f}/accountKeystore --from-file=privatekey=$FOLDER_PATH/${f}/accountPrivateKey
                   kubectl create configmap goquorum-node-validator-${i}-address --from-file=address=$FOLDER_PATH/${f}/address
                   
                   # add to the static-nodes
                   pubkey=$(cat $FOLDER_PATH/${f}/nodekey.pub )
-                  echo ",\"enode://$pubkey@goquorum-node-validator-$i-0.goquorum-node-validator-$i.{{ .Release.Namespace }}.svc.cluster.local:30303?discport=0&raftport=50400\"" >> /generated-config/static-nodes.json
+                  echo ",\"enode://$pubkey@goquorum-node-validator-$i.{{ .Release.Namespace }}.svc.cluster.local:30303?discport=0&raftport=50400\"" >> /generated-config/static-nodes.json
 
                   i=$((i+1))
                 fi
@@ -162,11 +162,11 @@ spec:
               for j in $(find $FOLDER_PATH -type d -iname "bootnode*" -exec basename {} \;);
               do
                 echo "Creating ${j} secrets in k8s ..."
-                kubectl create secret generic goquorum-node-bootnode-${i}-keys --namespace {{ .Release.Namespace }} --from-file=nodekey=$FOLDER_PATH/${j}/nodekey --from-file=nodekey.pub=$FOLDER_PATH/${j}/nodekey.pub --from-file=enode=$FOLDER_PATH/${j}/nodekey.pub --from-file=keystore=$FOLDER_PATH/${j}/accountKeystore
+                kubectl create secret generic goquorum-node-bootnode-${i}-keys --namespace {{ .Release.Namespace }} --from-file=nodekey=$FOLDER_PATH/${j}/nodekey --from-file=nodekey.pub=$FOLDER_PATH/${j}/nodekey.pub --from-file=enode=$FOLDER_PATH/${j}/nodekey.pub --from-file=keystore=$FOLDER_PATH/${j}/accountKeystore --from-file=privatekey=$FOLDER_PATH/${j}/accountPrivateKey
 
                 # add to the static-nodes
                 pubkey=$(cat $FOLDER_PATH/${j}/nodekey.pub )
-                echo ",\"enode://$pubkey@goquorum-node-bootnode-$i-0.goquorum-node-bootnode-$i.{{ .Release.Namespace }}.svc.cluster.local:30303?discport=0\"" >> /generated-config/static-nodes.json
+                echo ",\"enode://$pubkey@goquorum-node-bootnode-$i.{{ .Release.Namespace }}.svc.cluster.local:30303?discport=0\"" >> /generated-config/static-nodes.json
 
                 i=$((i+1))
               done
