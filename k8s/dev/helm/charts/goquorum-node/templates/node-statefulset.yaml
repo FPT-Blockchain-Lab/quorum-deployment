@@ -267,6 +267,16 @@ spec:
             cpu: "{{ .Values.node.quorum.resources.cpuLimit }}"
             memory: "{{ .Values.node.quorum.resources.memLimit }}"
         env:
+          - name: BOOTNODE1_PUBKEY
+            valueFrom:
+              secretKeyRef:
+                name: goquorum-node-bootnode-1-keys
+                key: enode
+          - name: BOOTNODE2_PUBKEY
+            valueFrom:
+              secretKeyRef:
+                name: goquorum-node-bootnode-2-keys
+                key: enode
           - name: POD_IP
             valueFrom:
               fieldRef:
@@ -345,15 +355,21 @@ spec:
             cp /config/static/static-nodes.json {{ .Values.node.quorum.dataPath }}/static-nodes.json
             cp /config/static/static-nodes.json {{ .Values.node.quorum.dataPath }}/permissioned-nodes.json
             cp /config/enhanced-permission/permission-config.json {{ .Values.node.quorum.dataPath }}/permission-config.json
-          
+
+            export BOOTNODE_ENODE1="enode://${BOOTNODE1_PUBKEY}@goquorum-node-bootnode-1-0.goquorum-node-bootnode-1.{{ .Release.Namespace }}.svc.cluster.local:30303" ;
+            export BOOTNODE_ENODE2="enode://${BOOTNODE2_PUBKEY}@goquorum-node-bootnode-2-0.goquorum-node-bootnode-2.{{ .Release.Namespace }}.svc.cluster.local:30303" ;
+
             geth \
             --datadir {{ .Values.node.quorum.dataPath }} \
             --gcmode {{ .Values.node.quorum.gcmode }} \
             --nodiscover \
             --permissioned \
+            --bootnodes=${BOOTNODE_ENODE1},${BOOTNODE_ENODE2} \
             --nat extip:$POD_IP \
             --verbosity {{ .Values.node.quorum.log.verbosity }} \
+          {{- if ne .Values.nodeFlags.bootnode true }}
             --mine --miner.threads {{ .Values.node.quorum.miner.threads }} --miner.gasprice 0 --emitcheckpoints \
+          {{- end }}
             --syncmode full --nousb \
             --metrics --pprof --pprof.addr {{ .Values.node.quorum.metrics.pprofaddr | quote }} --pprof.port {{ .Values.node.quorum.metrics.pprofport }} \
             --networkid {{ .Values.node.quorum.networkId }} \
