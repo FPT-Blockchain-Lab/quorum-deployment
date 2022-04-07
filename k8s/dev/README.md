@@ -113,6 +113,9 @@ helm install validator-1 ./charts/goquorum-node --namespace quorum --values ./va
 helm install validator-2 ./charts/goquorum-node --namespace quorum --values ./values/validator.yml
 helm install validator-3 ./charts/goquorum-node --namespace quorum --values ./values/validator.yml
 helm install validator-4 ./charts/goquorum-node --namespace quorum --values ./values/validator.yml
+helm install validator-5 ./charts/goquorum-node --namespace quorum --values ./values/validator.yml
+helm install validator-6 ./charts/goquorum-node --namespace quorum --values ./values/validator.yml
+helm install validator-7 ./charts/goquorum-node --namespace quorum --values ./values/validator.yml
 
 # deploy enhanced permission contracts
 helm install enhanced-permission ./charts/goquorum-enhanced-permission --namespace quorum --values ./values/enhanced-permission.yml
@@ -122,6 +125,9 @@ kubectl exec -it goquorum-node-validator-1-0 -nquorum -- reboot
 kubectl exec -it goquorum-node-validator-2-0 -nquorum -- reboot
 kubectl exec -it goquorum-node-validator-3-0 -nquorum -- reboot
 kubectl exec -it goquorum-node-validator-4-0 -nquorum -- reboot
+kubectl exec -it goquorum-node-validator-5-0 -nquorum -- reboot
+kubectl exec -it goquorum-node-validator-6-0 -nquorum -- reboot
+kubectl exec -it goquorum-node-validator-7-0 -nquorum -- reboot
 
 # spin up a quorum and tessera node pair
 helm install member-1 ./charts/goquorum-node --namespace quorum --values ./values/txnode.yml

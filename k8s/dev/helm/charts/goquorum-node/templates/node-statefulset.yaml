@@ -364,7 +364,9 @@ spec:
             --gcmode {{ .Values.node.quorum.gcmode }} \
             --nodiscover \
             --permissioned \
+          {{- if ne .Values.nodeFlags.bootnode true }}
             --bootnodes=${BOOTNODE_ENODE1},${BOOTNODE_ENODE2} \
+          {{- end }}
             --nat extip:$POD_IP \
             --verbosity {{ .Values.node.quorum.log.verbosity }} \
           {{- if ne .Values.nodeFlags.bootnode true }}
