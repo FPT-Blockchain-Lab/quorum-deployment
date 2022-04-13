@@ -32,7 +32,7 @@ x-quorum-def:
       do
         set -e
         if [ -S $${PRIVATE_CONFIG} ] && \
-          [ "I'm up!" == "$$(wget --timeout $${UDS_WAIT} -qO- --proxy off 172.16.239.10$${NODE_ID}:9000/upcheck)" ];
+          [ "I'm up!" == "$$(wget --timeout $${UDS_WAIT} -qO- --proxy off 172.16.240.10$${NODE_ID}:9000/upcheck)" ];
         then break
         else
           echo "Sleep $${UDS_WAIT} seconds. Waiting for TxManager."
@@ -58,8 +58,8 @@ x-quorum-def:
       
       geth --datadir $${DDIR} init $${GENESIS_FILE}
 
-      BOOTNODE_ENODE1="enode://0fd68911d9689f684c92d99cd85f2a3c8d02daf3096d7748126da8a773bd5bc7aa48db082047d445dc14732a74a03f1647f6a7dbe794d16ec1a1ca5ecef8e228@10.0.100.201:30778?discport=0" ;
-      BOOTNODE_ENODE2="enode://abb5bd5bf00b75041c61281b1f1e151afd439a6bfa089d2a43655c3d76debaaaf6ed7987928b3b9614448334d20e3105d1f43af67d7b58ac2f23b378b16ebacb@10.0.100.201:32507?discport=0" ;
+      BOOTNODE_ENODE1="enode://1d4c1ea1825c1e3328b14155a4a57d7b7c49da45dcc4bf10dede6d69321c5861951fc93e0103538cf9349981f562ac9cfb0d6e3f6bcc9e82cce52761d568c43f@line1.fat-space.com:30542?discport=0" ;
+      BOOTNODE_ENODE2="enode://4f202136096fa1de3caa90efe5baafe757c9e63952d8e60d668eac580f7c7402228085d6fea9a5eb1faf2691e7cb61a661effe6ec6bb46873676e7ccd7d7ad14@line1.fat-space.com:31143?discport=0" ;
 
       geth \
         --identity node$${NODE_ID}-${QUORUM_CONSENSUS:-clique} \
@@ -210,7 +210,7 @@ x-tx-manager-def:
             --url=http://$$(hostname -i):9000/ \
             --port=9000 \
             --socket=$${DDIR}/tm.ipc \
-            --othernodes=http://172.16.239.101:9000/,http://172.16.239.102:9000/,http://172.16.239.103:9000/,http://172.16.239.104:9000/ \
+            --othernodes=http://172.16.240.101:9000/,http://172.16.240.102:9000/,http://172.16.240.103:9000/,http://172.16.240.104:9000/ \
             --publickeys=/networkdata/keys/validator$${NODE_ID}/tessera.pub \
             --privatekeys=/networkdata/keys/validator$${NODE_ID}/tessera.key \
             --storage=$${DDIR} \
@@ -228,6 +228,7 @@ services:
     ports:
       - "22000:8545"
       - "22010:8546"
+      - "21000:21000"
     volumes:
       - vol1:/qdata
       - ./data:/networkdata:ro
@@ -238,7 +239,7 @@ services:
       - NODE_ID=0
     networks:
       quorum-dev-net:
-        ipv4_address: 172.16.239.11
+        ipv4_address: 172.16.240.11
   txmanager1:
     << : *tx-manager-def
     hostname: txmanager1
@@ -249,7 +250,7 @@ services:
       - ./data:/networkdata:ro
     networks:
       quorum-dev-net:
-        ipv4_address: 172.16.239.101
+        ipv4_address: 172.16.240.101
     environment:
       - PRIVATE_CONFIG=${PRIVATE_CONFIG:-/qdata/tm/tm.ipc}
       - NODE_ID=0
@@ -260,6 +261,6 @@ networks:
     ipam:
       driver: default
       config:
-      - subnet: 172.16.239.0/24
+      - subnet: 172.16.240.0/24
 volumes:
   "vol1":

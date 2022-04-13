@@ -1,18 +1,18 @@
 {
   "permissionModel": "v2",
-  "upgradableAddress": "0x1799aceDe87C692BcC858F092cEc47BD5aAcAF11",
-  "interfaceAddress": "0x33F8Bd467b5bA3ffA87e7baa05109fcB872d499d",
-  "implAddress": "0x7C12218a79f2569fc84FE9E092F913957AeEc83F",
-  "nodeMgrAddress": "0xeAdB601D976DCf6fe64Fb887Aed745F16Def8142",
-  "accountMgrAddress": "0xDED439957742515Be4C2AdEf5e541d7125d33d17",
-  "roleMgrAddress": "0xF95212a5869CdB0911C0C94d41Ba457bb7cD35A9",
-  "voterMgrAddress": "0xaa723Aa4302663bE37e8080b407D81B2dd92d230",
-  "orgMgrAddress": "0x0Db5A6f64F30A2Cb56c9751B4b3458CFbdf197C1",
+  "upgradableAddress": "0x1ebCa19FA29b46e97D71092Bd172d55699b1eCa6",
+  "interfaceAddress": "0xC95d91327cD84344085485f51885390859Fd00C8",
+  "implAddress": "0x5283B8cacBbc422Dd4BDD00b154Ec393a932928F",
+  "nodeMgrAddress": "0xc38A150F753a9fdE4c7801E1085FAb2B598779C3",
+  "accountMgrAddress": "0xc0042eD2D9D957001f7CbAFb9FfCE80B2fcDf9f6",
+  "roleMgrAddress": "0xbaB6e445E52bDF33820Db61aB867d4e29FcEA230",
+  "voterMgrAddress": "0x3C151B5c26b5799bF2dEb3574dF93370eA774859",
+  "orgMgrAddress": "0x8bBF5CB658F290E686719E40cF723CB03aAe80Ac",
   "nwAdminOrg": "ADMINORG",
   "nwAdminRole": "ADMIN",
   "orgAdminRole": "ORGADMIN",
   "accounts": [
-    "0xe204c9AB01429bAb081c40CEE436F6B4bbC3C173"
+    "0x36A409cD349061fCfC5d890e29747fCEaF59980B"
   ],
   "subOrgBreadth": 3,
   "subOrgDepth": 4
