@@ -1,0 +1,2 @@
+#!/bin/bash
+docker run --rm -it -v $(pwd)/data:/networkdata node:17.8.0-buster /bin/bash -c 'if [ ! -d "/networkdata/keys" ]; then FOLDER_PATH=$(cd tmp && npx --yes --quiet quorum-genesis-tool@latest --consensus clique --validators 1 --members 0 --bootnodes 0 --outputPath /tmp | tail -1 | sed -e "s/^Artifacts in folder: //"); cp -rf $FOLDER_PATH /networkdata/keys; fi;'
