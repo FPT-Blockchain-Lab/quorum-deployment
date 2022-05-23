@@ -13,5 +13,10 @@ grafana:
   username: admin
   password: password
 
+prometheus:
+  storage:
+    sizeLimit: "20Gi"
+    pvcSizeLimit: "20Gi"
+
 # local / azure
 provider: local
